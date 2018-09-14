@@ -113,6 +113,34 @@ __webpack_require__(1);
 
 var _bling = __webpack_require__(0);
 
+var _autocomplete = __webpack_require__(4);
+
+var _autocomplete2 = _interopRequireDefault(_autocomplete);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// $ is not jQuery. It's coming from bling.js
+(0, _autocomplete2.default)((0, _bling.$)('#address'), (0, _bling.$)('#lat'), (0, _bling.$)('#lng'));
+
+/***/ }),
+/* 3 */,
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function autocomplete(input, latInput, lngInput) {
+  // console.log(input, latInput, lngInput);
+  if (!input) return; // Skip this fn from running if there's no input on page
+  var dropdown = new google.maps.places.Autocomplete(input);
+}
+
+exports.default = autocomplete;
+
 /***/ })
 /******/ ]);
 //# sourceMappingURL=App.bundle.js.map
