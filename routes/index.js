@@ -7,11 +7,23 @@ const { catchErrors } = require('../handlers/errorHandlers');
 router.get('/', catchErrors(storeController.getStores));
 router.get('/stores', catchErrors(storeController.getStores));
 router.get('/add', storeController.addStore);
-router.post('/add', catchErrors(storeController.createStore));
-router.post('/add/:id', catchErrors(storeController.updateStore));
+
+router.post('/add',
+  storeController.upload,
+  catchErrors(storeController.resize),
+  catchErrors(storeController.createStore)
+);
+
+router.post('/add/:id', 
+  storeController.upload,
+  catchErrors(storeController.resize),
+  catchErrors(storeController.updateStore)
+);
+
 router.get('/stores/:id/edit', catchErrors(storeController.editStore));
+router.get('/store/:slug', catchErrors(storeController.getStoreBySlug));
 
-
+// Just for fun - not for the app
 router.get('/reverse/:name', (req, res) => {
   const reverse = [...req.params.name].reverse().join('');
   res.send(reverse);
