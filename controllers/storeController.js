@@ -83,10 +83,12 @@ exports.getStoreBySlug = async (req, res, next) => {
 exports.getStoresByTag = async (req, res) => {
   // Grabs value of :tag variable from the URL
   const tag = req.params.tag;
+  const tagQuery = tag || { $exists: true };
   const tagsPromise = Store.getTagsList();
   // Find all stores with a tag that matches the :tag variable in the URL / slug
-  const storesPromise = Store.find({ tags: tag });
-  const result = await Promise.all([tagsPromise, storesPromise]);
-  res.json(result);
-  // res.render('tag', { tags: tags, tag: tag, title: 'Tags' });
+  const storesPromise = Store.find({ tags: tagQuery });
+  // Here we're destructuring the results of tagsPromise and storesPromise into the variables tags and stores.
+  const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
+  // res.json(stores);
+  res.render('tag', { tags, stores, tag, title: 'Tags' });
 }
