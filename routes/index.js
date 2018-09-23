@@ -28,7 +28,7 @@ router.get('/tags/:tag', catchErrors(storeController.getStoresByTag));
 router.get('/login', userController.loginForm);
 router.get('/register', userController.registerForm);
 
-// router.post('/register',);
+router.post('/register', userController.validateRegister);
 
 
 // Just for fun - not for the app
