@@ -35,6 +35,7 @@ router.post('/register',
   authController.login
 );
 
+router.get('/logout', authController.logout);
 
 // Just for fun - not for the app
 router.get('/reverse/:name', (req, res) => {

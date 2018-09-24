@@ -6,3 +6,9 @@ exports.login = passport.authenticate('local', {
   successRedirect: '/',
   successFlash: 'You are logged in!'
 });
+
+exports.logout = (req, res) => {
+  req.logout();
+  req.flash('success', 'You are logged out! 👋');
+  res.redirect('/');
+}
