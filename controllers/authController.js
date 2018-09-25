@@ -1,4 +1,7 @@
 const passport = require('passport');
+const crypto = require('crypto');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 
 exports.login = passport.authenticate('local', {
   failureRedirect: '/login',
@@ -21,3 +24,19 @@ exports.isLoggedIn = (req, res, next) => {
   req.flash('error', 'Oops! You must be logged in to do that!');
   res.redirect('/login');
 }
+
+exports.forgot = async (req, res) => {
+  // 1. See if a user with that email exists
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    req.flash('error', 'No account with that email exists');
+    return res.redirect('/login');
+  }
+  // 2. Set reset tokens and when those tokens expire on their account
+  user.resetPasswordToken = crypto.randomBytes(20).toString('hex');
+  user.resetPasswordExpires = Date.now() + 3600000; // one hour from now
+  await user.save();
+  // 3. Send them an email with the token
+  
+  // 4. redirect to login page
+};
