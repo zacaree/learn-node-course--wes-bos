@@ -31,4 +31,4 @@ const server = app.listen(app.get('port'), () => {
 });
 
 // Temp send email
-require('./handlers/mail');
+// require('./handlers/mail');

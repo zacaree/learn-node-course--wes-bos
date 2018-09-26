@@ -13,10 +13,26 @@ const transport = nodemailer.createTransport({
   }
 });
 
-transport.sendMail({
-  from: 'Zac Remboldt <ZacRemboldt@gmail.com>',
-  to: 'ralph@example.com',
-  subject: 'My first Node mail!',
-  html: 'Hey check it out man! <strong>Bold text</strong>.',
-  text: 'Hey check it out man! **Bold text**.'
-});
+const generateHTML = (filename, options = {}) => {
+  // grab the html from our pug template
+  const html = pug.renderFile(`${__dirname}/../views/email/${filename}.pug`, options);
+  // take the CSS styles and include them inline with our html
+  const inlined = juice(html);
+  // return the final string which is all of our html and css combined
+  return inlined;
+}
+
+exports.send = async (options) => {
+  const html = generateHTML(options.filename, options);
+  const text = htmlToText.fromString(html);
+  const mailOptions = {
+    from: `Zac Remboldt <noreply@zacremboldt.com>`,
+    to: options.user.email,
+    subject: options.subject,
+    html,
+    text
+  };
+  const sendMail = promisify(transport.sendMail, transport);
+  return sendMail(mailOptions);
+};
+
