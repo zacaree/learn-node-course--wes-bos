@@ -54,6 +54,12 @@ router.post('/account/reset/:token',
   catchErrors(authController.update)
 );
 
+/* 
+  API
+*/
+
+router.get('/api/search', catchErrors(storeController.searchStores));
+
 
 // Just for fun - not for the app
 router.get('/reverse/:name', (req, res) => {
