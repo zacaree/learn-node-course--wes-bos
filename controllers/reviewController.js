@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const Review = mongoose.model('Review');
-// const User = mongoose.model('User');
-// const Store = mongoose.model('Store');
 
 exports.addReview = async (req, res) => {
   // add author & store to the req.body object.
