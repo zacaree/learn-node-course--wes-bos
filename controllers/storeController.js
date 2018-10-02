@@ -137,7 +137,8 @@ exports.mapStores = async (req, res) => {
     }
   }
 
-  const stores = await Store.find(q).select('slug name description location').limit(10);
+  // This is where we choose all of the store data we want to send to the map
+  const stores = await Store.find(q).select('slug name description location photo').limit(10);
   res.json(stores);
 };
 

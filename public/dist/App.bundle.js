@@ -1021,7 +1021,10 @@ function loadPlaces(map) {
     }
     // create bounds
     var bounds = new google.maps.LatLngBounds();
+    // Info when marker is clicked
+    var infoWindow = new google.maps.InfoWindow();
 
+    // Create a marker for every place in the places array
     var markers = places.map(function (place) {
       var _place$location$coord = _slicedToArray(place.location.coordinates, 2),
           placeLng = _place$location$coord[0],
@@ -1030,8 +1033,18 @@ function loadPlaces(map) {
       var position = { lat: placeLat, lng: placeLng };
       bounds.extend(position);
       var marker = new google.maps.Marker({ map: map, position: position });
+      // Adding place data to the marker object
       marker.place = place;
       return marker;
+    });
+
+    // When someone clicks a marker, show the details of that store
+    markers.forEach(function (marker) {
+      return marker.addListener('click', function () {
+        var html = '\n          <div class="popup">\n            <a href="/store/' + this.place.slug + '"> \n              <img src="/uploads/' + (this.place.photo || 'store.png') + '" alt="' + this.place.name + '" />\n              <p>' + this.place.name + ' - ' + this.place.location.address + '</p>\n            </a>\n          </div>\n        ';
+        infoWindow.setContent(html);
+        infoWindow.open(map, this);
+      });
     });
 
     // Then zoom the map to fit all the markers
@@ -1048,6 +1061,10 @@ function makeMap(mapDiv) {
 
   var input = (0, _bling.$)('[name="geolocate"]');
   var autocomplete = new google.maps.places.Autocomplete(input);
+  autocomplete.addListener('place_changed', function () {
+    var place = autocomplete.getPlace();
+    loadPlaces(map, place.geometry.location.lat(), place.geometry.location.lng());
+  });
 };
 
 exports.default = makeMap;
