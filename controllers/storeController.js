@@ -148,12 +148,15 @@ exports.mapPage = (req, res) => {
 };
 
 exports.heartStore = async (req, res) => {
+  // Get a list of the user's hearts
   const hearts = req.user.hearts.map(obj => obj.toString());
+  // then check if clicked heart is already in that list/array. If it is, remove it. If it isn't, add it to the array.
   const operator = hearts.includes(req.params.id) ? '$pull' : '$addToSet';
+  // Find user and update their hearts property
   const user = await User
   .findByIdAndUpdate(req.user._id,
     { [operator]: { hearts: req.params.id } },
-    { new: true }
+    { new: true } // By default MongoDB will show you data before its been updated. This makes sure it displays the updated data.
   );
-  res.json(hearts);
+  res.json(user);
 };
