@@ -25,3 +25,13 @@ That will populate 16 stores with 3 authors and 41 reviews. The logins for the a
 |Beau|beau@example.com|beau|
 
 
+
+## Dev Notes
+Package.json scripts have been changed to the following:
+
+For development run:
+npm run dev
+
+To run the app:
+node start.js
+
