@@ -52,9 +52,29 @@ exports.createStore = async (req, res) => {
 };
 
 exports.getStores = async (req, res) => {
-  // Query the database for a list of all stores
-  const stores = await Store.find();
-  res.render('stores', { title: 'Stores', stores: stores });
+  // Variables are for pagination
+  const page = req.params.page || 1;
+  const limit = 6;
+  const skip = (page * limit) - limit;
+  // Query the database for stores grabbing the set defined by .skip and .limit
+  const storesPromise = Store
+    .find()
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: 'desc' });
+  // Count so we know the total number of stores in the DB
+  const countPromise = Store.count();
+  // Await both promises at once and set their variable names
+  const [stores, count] = await Promise.all([storesPromise, countPromise]);
+  // Find the total number of pages needed to fit all stores
+  const pages = Math.ceil(count / limit);
+  if (!stores.length && skip) {
+    req.flash('info', `You asked for page ${page} but that doesn't exist so you've been redirected to page ${pages}`);
+    res.redirect(`/stores/page/${pages}`);
+    return;
+  }
+  // Render and pass collected data to the view
+  res.render('stores', { title: 'Stores', stores, page, pages, count });
 };
 
 const confirmOwner = (store, user) => {
