@@ -13,6 +13,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
+*.log
+.idea
+haters/
 
 npm-debug.log*
 yarn-debug.log*
@@ -22,3 +25,4 @@ yarn-error.log*
 
 # Contains data that I don't want on GitHub
 variables.env
+variables.env.now
